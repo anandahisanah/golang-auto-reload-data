@@ -1,0 +1,38 @@
+[
+    {
+        "code": "Water",
+        "name": "Aman",
+        "range_start": 0,
+        "range_end": 5
+    },
+    {
+        "code": "Water",
+        "name": "Siaga",
+        "range_start": 6,
+        "range_end": 8
+    },
+    {
+        "code": "Water",
+        "name": "Bahaya",
+        "range_start": 9,
+        "range_end": 50
+    },
+    {
+        "code": "Wind",
+        "name": "Aman",
+        "range_start": 0,
+        "range_end": 6
+    },
+    {
+        "code": "Wind",
+        "name": "Siaga",
+        "range_start": 7,
+        "range_end": 15
+    },
+    {
+        "code": "Wind",
+        "name": "Bahaya",
+        "range_start": 16,
+        "range_end": 50
+    }
+]
