@@ -62,9 +62,9 @@ func createLog(done chan<- bool) {
 		fmt.Println("Status Water :", Log.StatusWater.Name)
 		fmt.Println("Wind :", Log.Wind)
 		fmt.Println("Status Wind :", Log.StatusWind.Name)
-		fmt.Println("\nMenunggu 5 detik...\n")
+		fmt.Println("\nMenunggu 15 detik...\n")
 
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 15)
 	}
 	done <- true
 }
