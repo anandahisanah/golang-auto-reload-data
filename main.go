@@ -3,27 +3,73 @@ package main
 import (
 	"assignment-3/database"
 	"assignment-3/models"
-	"assignment-3/routes"
-	_ "assignment-3/routes"
 	"encoding/json"
 	"fmt"
-	_ "html/template"
 	"io/ioutil"
 	"log"
-	_ "math/rand"
-	_ "net/http"
-	_ "time"
-
-	_ "github.com/gin-gonic/gin"
+	"math/rand"
+	"time"
 )
 
 func main() {
 	database.StartDB()
 
-	/*
-		seed
-	*/
+	seederStatus()
 
+	// channel
+	done := make(chan bool)
+
+	go createLog(done)
+
+	<-done
+}
+
+func createLog(done chan<- bool) {
+	for {
+		db := database.GetDB()
+
+		rand.Seed(time.Now().UnixNano())
+
+		// generate random int
+		randomIntWater := rand.Intn(20) + 1
+		randomIntWind := rand.Intn(20) + 1
+
+		// find water status
+		var statusWater models.Status
+		db.Order("id DESC").First(&statusWater, "code = ? AND range_start <= ?", "Water", randomIntWater)
+
+		var statusWind models.Status
+		db.Order("id DESC").First(&statusWind, "code = ? AND range_start <= ?", "Wind", randomIntWind)
+
+		Log := models.Log{
+			StatusWaterId: statusWater.Id,
+			StatusWindId:  statusWind.Id,
+			Water:         randomIntWater,
+			Wind:          randomIntWind,
+		}
+
+		err := db.Create(&Log).Error
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		err = db.Preload("StatusWater").Preload("StatusWind").First(&Log).Error
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Println("Water :", Log.Water)
+		fmt.Println("Status Water :", Log.StatusWater.Name)
+		fmt.Println("Wind :", Log.Wind)
+		fmt.Println("Status Wind :", Log.StatusWind.Name)
+		fmt.Println("\nMenunggu 5 detik...\n")
+
+		time.Sleep(time.Second * 5)
+	}
+	done <- true
+}
+
+func seederStatus() {
 	// truncate
 	err := database.GetDB().Exec("TRUNCATE TABLE statuses CASCADE").Error
 	if err != nil {
@@ -52,7 +98,4 @@ func main() {
 	}
 
 	fmt.Println("Seeding Status complete")
-
-	// start server
-	routes.StartServer().Run(":8080")
 }
