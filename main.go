@@ -31,8 +31,8 @@ func createLog(done chan<- bool) {
 		rand.Seed(time.Now().UnixNano())
 
 		// generate random int
-		randomIntWater := rand.Intn(20) + 1
-		randomIntWind := rand.Intn(20) + 1
+		randomIntWater := rand.Intn(100) + 1
+		randomIntWind := rand.Intn(100) + 1
 
 		// find water status
 		var statusWater models.Status
